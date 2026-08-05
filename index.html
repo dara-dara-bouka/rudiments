@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>40 PAS Drum Rudiments - Gentle Dark Gradient</title>
+  <style>
+    :root {
+      /* ベース背景・テキスト */
+      --bg-color: #0b0d17;
+      --card-bg: rgba(21, 26, 46, 0.75);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f1f5f9;
+      --text-dim: #64748b;
+
+      /* 各カテゴリ固有のカラー（落ち着いたトーン） */
+      --roll-color: #f43f5e;   /* ローズピンク */
+      --diddle-color: #2dd4bf; /* ミントティール */
+      --flam-color: #fbbf24;   /* ブライトアンバー */
+      --drag-color: #c084fc;   /* ネオンパープル */
+
+      /* 発光用（Glow）アルファカラー */
+      --roll-glow: rgba(244, 63, 94, 0.25);
+      --diddle-glow: rgba(45, 212, 191, 0.25);
+      --flam-glow: rgba(251, 191, 36, 0.25);
+      --drag-glow: rgba(192, 132, 252, 0.25);
+
+      /* 近いトーン（ブルー〜シアン）で揃えた目に優しいグラデーション */
+      --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
+      --accent-glow: rgba(56, 189, 248, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(34, 211, 238, 0.04) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text);
+      padding: 2.5rem 1rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+
+    /* タイトル：同系色で滑らかにつなぐ目の負担が少ないグラデーション */
+    h1 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: var(--accent-gradient);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      padding: 1.25rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .search-box {
+      flex: 1 1 250px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(11, 13, 23, 0.6);
+      color: var(--text);
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(11, 13, 23, 0.4);
+      color: var(--text-dim);
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: all 0.25s ease;
+    }
+
+    .btn:hover {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* All (40) ボタンのアクティブ背景 */
+    .btn.btn-all.active {
+      background: var(--accent-gradient);
+      color: #0b0d17;
+      border-color: transparent;
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    /* 各カテゴリボタンのアクティブ（連動カラー） */
+    .btn.btn-roll.active {
+      background: var(--roll-color);
+      color: #0b0d17;
+      border-color: var(--roll-color);
+      box-shadow: 0 0 15px var(--roll-glow);
+    }
+
+    .btn.btn-diddle.active {
+      background: var(--diddle-color);
+      color: #0b0d17;
+      border-color: var(--diddle-color);
+      box-shadow: 0 0 15px var(--diddle-glow);
+    }
+
+    .btn.btn-flam.active {
+      background: var(--flam-color);
+      color: #0b0d17;
+      border-color: var(--flam-color);
+      box-shadow: 0 0 15px var(--flam-glow);
+    }
+
+    .btn.btn-drag.active {
+      background: var(--drag-color);
+      color: #0b0d17;
+      border-color: var(--drag-color);
+      box-shadow: 0 0 15px var(--drag-glow);
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .card.roll::before { background-color: var(--roll-color); }
+    .card.diddle::before { background-color: var(--diddle-color); }
+    .card.flam::before { background-color: var(--flam-color); }
+    .card.drag::before { background-color: var(--drag-color); }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card.roll:hover {
+      border-color: var(--roll-color);
+      box-shadow: 0 10px 30px -10px var(--roll-glow);
+    }
+    .card.diddle:hover {
+      border-color: var(--diddle-color);
+      box-shadow: 0 10px 30px -10px var(--diddle-glow);
+    }
+    .card.flam:hover {
+      border-color: var(--flam-color);
+      box-shadow: 0 10px 30px -10px var(--flam-glow);
+    }
+    .card.drag:hover {
+      border-color: var(--drag-color);
+      box-shadow: 0 10px 30px -10px var(--drag-glow);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .rudiment-number {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .rudiment-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .badge.roll { background: rgba(244, 63, 94, 0.15); color: var(--roll-color); border: 1px solid rgba(244, 63, 94, 0.3); }
+    .badge.diddle { background: rgba(45, 212, 191, 0.15); color: var(--diddle-color); border: 1px solid rgba(45, 212, 191, 0.3); }
+    .badge.flam { background: rgba(251, 191, 36, 0.15); color: var(--flam-color); border: 1px solid rgba(251, 191, 36, 0.3); }
+    .badge.drag { background: rgba(192, 132, 252, 0.15); color: var(--drag-color); border: 1px solid rgba(192, 132, 252, 0.3); }
+
+    .sheet-music {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 10px;
+      padding: 0.5rem;
+      height: 85px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+    }
+
+    .sheet-music svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .sticking {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      background: rgba(11, 13, 23, 0.8);
+      padding: 0.65rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--text);
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .card.roll .sticking { color: var(--roll-color); }
+    .card.diddle .sticking { color: var(--diddle-color); }
+    .card.flam .sticking { color: var(--flam-color); }
+    .card.drag .sticking { color: var(--drag-color); }
+
+    .meta {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>40 PAS Drum Rudiments</h1>
+    <p style="color: var(--text-dim)">Essential Reference Map for Drummers</p>
+  </header>
+
+  <div class="controls">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search by name or sticking... (e.g. Paradiddle, RLRR)">
+    </div>
+    
+    <div class="filter-buttons">
+      <button class="btn btn-all active" onclick="filterCategory('all', this)">All (40)</button>
+      <button class="btn btn-roll" onclick="filterCategory('roll', this)">Rolls (15)</button>
+      <button class="btn btn-diddle" onclick="filterCategory('diddle', this)">Diddles (4)</button>
+      <button class="btn btn-flam" onclick="filterCategory('flam', this)">Flams (11)</button>
+      <button class="btn btn-drag" onclick="filterCategory('drag', this)">Drags (10)</button>
+    </div>
+  </div>
+
+  <div id="gridContainer" class="grid-container"></div>
+
+  <script>
+    const rudimentsData = [
+      // Roll Rudiments (1-15)
+      { id: 1, name: "Single Stroke Roll", category: "roll", sticking: "R L R L R L R L", structure: "Single strokes" },
+      { id: 2, name: "Single Stroke Four", category: "roll", sticking: "R L R L", structure: "4-note single strokes" },
+      { id: 3, name: "Single Stroke Seven", category: "roll", sticking: "R L R L R L R", structure: "7-note single strokes" },
+      { id: 4, name: "Multiple Bounce Roll", category: "roll", sticking: "z z z z", structure: "Buzz / Open roll" },
+      { id: 5, name: "Triple Stroke Roll", category: "roll", sticking: "R R R L L L", structure: "3 + 3 (Triplets)" },
+      { id: 6, name: "Double Stroke Open Roll", category: "roll", sticking: "R R L L R R L L", structure: "Double strokes" },
+      { id: 7, name: "Five Stroke Roll", category: "roll", sticking: "R R L L R", structure: "2 + 2 + 1" },
+      { id: 8, name: "Six Stroke Roll", category: "roll", sticking: "R L L R R L", structure: "1 + 2 + 2 + 1" },
+      { id: 9, name: "Seven Stroke Roll", category: "roll", sticking: "R R L L R R L", structure: "2 + 2 + 2 + 1" },
+      { id: 10, name: "Nine Stroke Roll", category: "roll", sticking: "R R L L R R L L R", structure: "2×4 + 1" },
+      { id: 11, name: "Ten Stroke Roll", category: "roll", sticking: "R R L L R R L L R L", structure: "2×4 + 1 + 1" },
+      { id: 12, name: "Eleven Stroke Roll", category: "roll", sticking: "R R L L R R L L R R L", structure: "2×5 + 1" },
+      { id: 13, name: "Thirteen Stroke Roll", category: "roll", sticking: "R R L L R R L L R R L L R", structure: "2×6 + 1" },
+      { id: 14, name: "Fifteen Stroke Roll", category: "roll", sticking: "R R L L R R L L R R L L R R L", structure: "2×7 + 1" },
+      { id: 15, name: "Seventeen Stroke Roll", category: "roll", sticking: "R R L L R R L L R R L L R R L L R", structure: "2×8 + 1" },
+
+      // Diddle Rudiments (16-19)
+      { id: 16, name: "Single Paradiddle", category: "diddle", sticking: "R L R R L R L L", structure: "Single + Diddle" },
+      { id: 17, name: "Double Paradiddle", category: "diddle", sticking: "R L R L R R L R L R L L", structure: "Double Single + Diddle" },
+      { id: 18, name: "Triple Paradiddle", category: "diddle", sticking: "R L R L R L R R L R L R L R L L", structure: "Triple Single + Diddle" },
+      { id: 19, name: "Single Paradiddle-Diddle", category: "diddle", sticking: "R L R R L L", structure: "Paradiddle + Diddle" },
+
+      // Flam Rudiments (20-30)
+      { id: 20, name: "Flam", category: "flam", sticking: "lR / rL", structure: "Grace note + Primary" },
+      { id: 21, name: "Flam Accent", category: "flam", sticking: "lR L R rL R L", structure: "Flam + Triplet" },
+      { id: 22, name: "Flam Tap", category: "flam", sticking: "lR R rL L", structure: "Flam + Tap" },
+      { id: 23, name: "Flamacue", category: "flam", sticking: "lR L R L lR", structure: "Accent shift pattern" },
+      { id: 24, name: "Flam Paradiddle", category: "flam", sticking: "lR L R R rL R L L", structure: "Flam + Paradiddle" },
+      { id: 25, name: "Single Flammed Mill", category: "flam", sticking: "lR R L R rL L R L", structure: "Reverse Paradiddle + Grace" },
+      { id: 26, name: "Flam Paradiddle-Diddle", category: "flam", sticking: "lR L R R L L", structure: "Flam + Paradiddle-Diddle" },
+      { id: 27, name: "Pataflafla", category: "flam", sticking: "lR L R rL", structure: "Alternating Flams" },
+      { id: 28, name: "Swiss Army Triplet", category: "flam", sticking: "lR R L lR R L", structure: "Double-based triplet flam" },
+      { id: 29, name: "Inverted Flam Tap", category: "flam", sticking: "lR L rL R", structure: "Inside taps" },
+      { id: 30, name: "Flam Drag", category: "flam", sticking: "lR L L R rL R R L", structure: "Flam + Drag" },
+
+      // Drag Rudiments (31-40)
+      { id: 31, name: "Drag", category: "drag", sticking: "llR / rrL", structure: "Double grace + Primary" },
+      { id: 32, name: "Single Drag Tap", category: "drag", sticking: "llR L rrL R", structure: "Drag + Single tap" },
+      { id: 33, name: "Double Drag Tap", category: "drag", sticking: "llR llR L", structure: "Double Drag + Single tap" },
+      { id: 34, name: "Lesson 25", category: "drag", sticking: "llR L R", structure: "Drag accent pattern" },
+      { id: 35, name: "Single Dragadiddle", category: "drag", sticking: "RR L R R LL R L L", structure: "Paradiddle variation" },
+      { id: 36, name: "Drag Paradiddle #1", category: "drag", sticking: "R llR L R R L rrL R L L", structure: "Drag-accented Paradiddle" },
+      { id: 37, name: "Drag Paradiddle #2", category: "drag", sticking: "R llR llR L R R L rrL rrL R L L", structure: "Double Drag Paradiddle" },
+      { id: 38, name: "Single Ratamacue", category: "drag", sticking: "llR L R L", structure: "Drag + 4-note resolve" },
+      { id: 39, name: "Double Ratamacue", category: "drag", sticking: "llR llR L R L", structure: "Double Drag + 4-note resolve" },
+      { id: 40, name: "Triple Ratamacue", category: "drag", sticking: "llR llR llR L R L", structure: "Triple Drag + 4-note resolve" }
+    ];
+
+    const emptyStaveSVG = `
+      <svg viewBox="0 0 280 60" xmlns="http://www.w3.org/2000/svg">
+        <line x1="10" y1="10" x2="270" y2="10" stroke="#334155" stroke-width="1"/>
+        <line x1="10" y1="20" x2="270" y2="20" stroke="#334155" stroke-width="1"/>
+        <line x1="10" y1="30" x2="270" y2="30" stroke="#334155" stroke-width="1"/>
+        <line x1="10" y1="40" x2="270" y2="40" stroke="#334155" stroke-width="1"/>
+        <line x1="10" y1="50" x2="270" y2="50" stroke="#334155" stroke-width="1"/>
+
+        <line x1="10" y1="10" x2="10" y2="50" stroke="#1e293b" stroke-width="2"/>
+        <line x1="270" y1="10" x2="270" y2="50" stroke="#1e293b" stroke-width="2"/>
+
+        <rect x="22" y="20" width="3" height="20" fill="#1e293b"/>
+        <rect x="28" y="20" width="3" height="20" fill="#1e293b"/>
+      </svg>
+    `;
+
+    let currentCategory = 'all';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderCards();
+    });
+
+    function renderCards() {
+      const grid = document.getElementById('gridContainer');
+      grid.innerHTML = '';
+
+      rudimentsData.forEach(item => {
+        const card = document.createElement('div');
+        card.className = `card ${item.category}`;
+        card.setAttribute('data-id', item.id);
+        card.setAttribute('data-name', item.name.toLowerCase());
+        card.setAttribute('data-sticking', item.sticking.toLowerCase());
+        card.setAttribute('data-category', item.category);
+
+        card.innerHTML = `
+          <div class="card-header">
+            <span class="rudiment-number">No. ${item.id}</span>
+            <span class="badge ${item.category}">${item.category.toUpperCase()}</span>
+          </div>
+          <div class="rudiment-title">${item.name}</div>
+          
+          <div class="sheet-music">
+            ${emptyStaveSVG}
+          </div>
+
+          <div class="sticking">${item.sticking}</div>
+          <div class="meta">Structure: ${item.structure}</div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', applyFilters);
+
+    function filterCategory(category, btn) {
+      currentCategory = category;
+      document.querySelectorAll('.filter-buttons .btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const query = searchInput.value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.card');
+
+      cards.forEach(card => {
+        const name = card.getAttribute('data-name');
+        const sticking = card.getAttribute('data-sticking');
+        const category = card.getAttribute('data-category');
+
+        const matchesSearch = name.includes(query) || sticking.includes(query);
+        const matchesCategory = currentCategory === 'all' || category === currentCategory;
+
+        if (matchesSearch && matchesCategory) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
