@@ -13,7 +13,7 @@
       --text: #f1f5f9;
       --text-dim: #64748b;
 
-      /* 各カテゴリ固有のカラー（落ち着いたトーン） */
+      /* 各カテゴリ固有のカラー */
       --roll-color: #f43f5e;   /* ローズピンク */
       --diddle-color: #2dd4bf; /* ミントティール */
       --flam-color: #fbbf24;   /* ブライトアンバー */
@@ -25,7 +25,7 @@
       --flam-glow: rgba(251, 191, 36, 0.25);
       --drag-glow: rgba(192, 132, 252, 0.25);
 
-      /* 近いトーン（ブルー〜シアン）で揃えた目に優しいグラデーション */
+      /* 目に優しいグラデーション */
       --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #22d3ee 100%);
       --accent-glow: rgba(56, 189, 248, 0.2);
     }
@@ -54,14 +54,13 @@
       text-align: center;
     }
 
-    /* タイトル：同系色で滑らかにつなぐ目の負担が少ないグラデーション */
     h1 {
       font-size: 2.3rem;
       font-weight: 800;
       letter-spacing: -0.5px;
       background: var(--accent-gradient);
-      background-clip: text;
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 0.5rem;
     }
@@ -123,7 +122,6 @@
       border-color: rgba(255, 255, 255, 0.2);
     }
 
-    /* All (40) ボタンのアクティブ背景 */
     .btn.btn-all.active {
       background: var(--accent-gradient);
       color: #0b0d17;
@@ -131,7 +129,6 @@
       box-shadow: 0 0 12px var(--accent-glow);
     }
 
-    /* 各カテゴリボタンのアクティブ（連動カラー） */
     .btn.btn-roll.active {
       background: var(--roll-color);
       color: #0b0d17;
@@ -251,20 +248,25 @@
     .badge.flam { background: rgba(251, 191, 36, 0.15); color: var(--flam-color); border: 1px solid rgba(251, 191, 36, 0.3); }
     .badge.drag { background: rgba(192, 132, 252, 0.15); color: var(--drag-color); border: 1px solid rgba(192, 132, 252, 0.3); }
 
-    .sheet-music {
-      background: rgba(255, 255, 255, 0.95);
+    /* 楽譜画像コンテナ */
+    .sheet-music-container {
+      background: #ffffff;
       border-radius: 10px;
       padding: 0.5rem;
-      height: 85px;
+      height: 140px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+      overflow: hidden;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    .sheet-music svg {
+    .sheet-music-container img {
       width: 100%;
       height: 100%;
+      object-fit: contain;
+      transform: scale(1.35);
+      transition: transform 0.3s ease;
     }
 
     .sticking {
@@ -321,69 +323,53 @@
   <script>
     const rudimentsData = [
       // Roll Rudiments (1-15)
-      { id: 1, name: "Single Stroke Roll", category: "roll", sticking: "R L R L R L R L", structure: "Single strokes" },
-      { id: 2, name: "Single Stroke Four", category: "roll", sticking: "R L R L", structure: "4-note single strokes" },
-      { id: 3, name: "Single Stroke Seven", category: "roll", sticking: "R L R L R L R", structure: "7-note single strokes" },
-      { id: 4, name: "Multiple Bounce Roll", category: "roll", sticking: "z z z z", structure: "Buzz / Open roll" },
-      { id: 5, name: "Triple Stroke Roll", category: "roll", sticking: "R R R L L L", structure: "3 + 3 (Triplets)" },
-      { id: 6, name: "Double Stroke Open Roll", category: "roll", sticking: "R R L L R R L L", structure: "Double strokes" },
-      { id: 7, name: "Five Stroke Roll", category: "roll", sticking: "R R L L R", structure: "2 + 2 + 1" },
-      { id: 8, name: "Six Stroke Roll", category: "roll", sticking: "R L L R R L", structure: "1 + 2 + 2 + 1" },
-      { id: 9, name: "Seven Stroke Roll", category: "roll", sticking: "R R L L R R L", structure: "2 + 2 + 2 + 1" },
-      { id: 10, name: "Nine Stroke Roll", category: "roll", sticking: "R R L L R R L L R", structure: "2×4 + 1" },
-      { id: 11, name: "Ten Stroke Roll", category: "roll", sticking: "R R L L R R L L R L", structure: "2×4 + 1 + 1" },
-      { id: 12, name: "Eleven Stroke Roll", category: "roll", sticking: "R R L L R R L L R R L", structure: "2×5 + 1" },
-      { id: 13, name: "Thirteen Stroke Roll", category: "roll", sticking: "R R L L R R L L R R L L R", structure: "2×6 + 1" },
-      { id: 14, name: "Fifteen Stroke Roll", category: "roll", sticking: "R R L L R R L L R R L L R R L", structure: "2×7 + 1" },
-      { id: 15, name: "Seventeen Stroke Roll", category: "roll", sticking: "R R L L R R L L R R L L R R L L R", structure: "2×8 + 1" },
+      { id: 1, name: "Single Stroke Roll", category: "roll", sticking: "R L R L R L R L", structure: "Single strokes", image: "001.png" },
+      { id: 2, name: "Single Stroke Four", category: "roll", sticking: "R L R L", structure: "4-note single strokes", image: "002.png" },
+      { id: 3, name: "Single Stroke Seven", category: "roll", sticking: "R L R L R L R", structure: "7-note single strokes", image: "003.png" },
+      { id: 4, name: "Multiple Bounce Roll", category: "roll", sticking: "z z z z", structure: "Buzz / Open roll", image: "004.png" },
+      { id: 5, name: "Triple Stroke Roll", category: "roll", sticking: "R R R L L L", structure: "3 + 3 (Triplets)", image: "005.png" },
+      { id: 6, name: "Double Stroke Open Roll", category: "roll", sticking: "R R L L R R L L", structure: "Double strokes", image: "006.png" },
+      { id: 7, name: "Five Stroke Roll", category: "roll", sticking: "R R L L R", structure: "2 + 2 + 1", image: "007.png" },
+      { id: 8, name: "Six Stroke Roll", category: "roll", sticking: "R L L R R L", structure: "1 + 2 + 2 + 1", image: "008.png" },
+      { id: 9, name: "Seven Stroke Roll", category: "roll", sticking: "R R L L R R L", structure: "2 + 2 + 2 + 1", image: "009.png" },
+      { id: 10, name: "Nine Stroke Roll", category: "roll", sticking: "R R L L R R L L R", structure: "2×4 + 1", image: "010.png" },
+      { id: 11, name: "Ten Stroke Roll", category: "roll", sticking: "R R L L R R L L R L", structure: "2×4 + 1 + 1", image: "011.png" },
+      { id: 12, name: "Eleven Stroke Roll", category: "roll", sticking: "R R L L R R L L R R L", structure: "2×5 + 1", image: "012.png" },
+      { id: 13, name: "Thirteen Stroke Roll", category: "roll", sticking: "R R L L R R L L R R L L R", structure: "2×6 + 1", image: "013.png" },
+      { id: 14, name: "Fifteen Stroke Roll", category: "roll", sticking: "R R L L R R L L R R L L R R L", structure: "2×7 + 1", image: "014.png" },
+      { id: 15, name: "Seventeen Stroke Roll", category: "roll", sticking: "R R L L R R L L R R L L R R L L R", structure: "2×8 + 1", image: "015.png" },
 
       // Diddle Rudiments (16-19)
-      { id: 16, name: "Single Paradiddle", category: "diddle", sticking: "R L R R L R L L", structure: "Single + Diddle" },
-      { id: 17, name: "Double Paradiddle", category: "diddle", sticking: "R L R L R R L R L R L L", structure: "Double Single + Diddle" },
-      { id: 18, name: "Triple Paradiddle", category: "diddle", sticking: "R L R L R L R R L R L R L R L L", structure: "Triple Single + Diddle" },
-      { id: 19, name: "Single Paradiddle-Diddle", category: "diddle", sticking: "R L R R L L", structure: "Paradiddle + Diddle" },
+      { id: 16, name: "Single Paradiddle", category: "diddle", sticking: "R L R R L R L L", structure: "Single + Diddle", image: "016.png" },
+      { id: 17, name: "Double Paradiddle", category: "diddle", sticking: "R L R L R R L R L R L L", structure: "Double Single + Diddle", image: "017.png" },
+      { id: 18, name: "Triple Paradiddle", category: "diddle", sticking: "R L R L R L R R L R L R L R L L", structure: "Triple Single + Diddle", image: "018.png" },
+      { id: 19, name: "Single Paradiddle-Diddle", category: "diddle", sticking: "R L R R L L", structure: "Paradiddle + Diddle", image: "019.png" },
 
       // Flam Rudiments (20-30)
-      { id: 20, name: "Flam", category: "flam", sticking: "lR / rL", structure: "Grace note + Primary" },
-      { id: 21, name: "Flam Accent", category: "flam", sticking: "lR L R rL R L", structure: "Flam + Triplet" },
-      { id: 22, name: "Flam Tap", category: "flam", sticking: "lR R rL L", structure: "Flam + Tap" },
-      { id: 23, name: "Flamacue", category: "flam", sticking: "lR L R L lR", structure: "Accent shift pattern" },
-      { id: 24, name: "Flam Paradiddle", category: "flam", sticking: "lR L R R rL R L L", structure: "Flam + Paradiddle" },
-      { id: 25, name: "Single Flammed Mill", category: "flam", sticking: "lR R L R rL L R L", structure: "Reverse Paradiddle + Grace" },
-      { id: 26, name: "Flam Paradiddle-Diddle", category: "flam", sticking: "lR L R R L L", structure: "Flam + Paradiddle-Diddle" },
-      { id: 27, name: "Pataflafla", category: "flam", sticking: "lR L R rL", structure: "Alternating Flams" },
-      { id: 28, name: "Swiss Army Triplet", category: "flam", sticking: "lR R L lR R L", structure: "Double-based triplet flam" },
-      { id: 29, name: "Inverted Flam Tap", category: "flam", sticking: "lR L rL R", structure: "Inside taps" },
-      { id: 30, name: "Flam Drag", category: "flam", sticking: "lR L L R rL R R L", structure: "Flam + Drag" },
+      { id: 20, name: "Flam", category: "flam", sticking: "lR / rL", structure: "Grace note + Primary", image: "020.png" },
+      { id: 21, name: "Flam Accent", category: "flam", sticking: "lR L R rL R L", structure: "Flam + Triplet", image: "021.png" },
+      { id: 22, name: "Flam Tap", category: "flam", sticking: "lR R rL L", structure: "Flam + Tap", image: "022.png" },
+      { id: 23, name: "Flamacue", category: "flam", sticking: "lR L R L lR", structure: "Accent shift pattern", image: "023.png" },
+      { id: 24, name: "Flam Paradiddle", category: "flam", sticking: "lR L R R rL R L L", structure: "Flam + Paradiddle", image: "024.png" },
+      { id: 25, name: "Single Flammed Mill", category: "flam", sticking: "lR R L R rL L R L", structure: "Reverse Paradiddle + Grace", image: "025.png" },
+      { id: 26, name: "Flam Paradiddle-Diddle", category: "flam", sticking: "lR L R R L L", structure: "Flam + Paradiddle-Diddle", image: "026.png" },
+      { id: 27, name: "Pataflafla", category: "flam", sticking: "lR L R rL", structure: "Alternating Flams", image: "027.png" },
+      { id: 28, name: "Swiss Army Triplet", category: "flam", sticking: "lR R L lR R L", structure: "Double-based triplet flam", image: "028.png" },
+      { id: 29, name: "Inverted Flam Tap", category: "flam", sticking: "lR L rL R", structure: "Inside taps", image: "029.png" },
+      { id: 30, name: "Flam Drag", category: "flam", sticking: "lR L L R rL R R L", structure: "Flam + Drag", image: "030.png" },
 
       // Drag Rudiments (31-40)
-      { id: 31, name: "Drag", category: "drag", sticking: "llR / rrL", structure: "Double grace + Primary" },
-      { id: 32, name: "Single Drag Tap", category: "drag", sticking: "llR L rrL R", structure: "Drag + Single tap" },
-      { id: 33, name: "Double Drag Tap", category: "drag", sticking: "llR llR L", structure: "Double Drag + Single tap" },
-      { id: 34, name: "Lesson 25", category: "drag", sticking: "llR L R", structure: "Drag accent pattern" },
-      { id: 35, name: "Single Dragadiddle", category: "drag", sticking: "RR L R R LL R L L", structure: "Paradiddle variation" },
-      { id: 36, name: "Drag Paradiddle #1", category: "drag", sticking: "R llR L R R L rrL R L L", structure: "Drag-accented Paradiddle" },
-      { id: 37, name: "Drag Paradiddle #2", category: "drag", sticking: "R llR llR L R R L rrL rrL R L L", structure: "Double Drag Paradiddle" },
-      { id: 38, name: "Single Ratamacue", category: "drag", sticking: "llR L R L", structure: "Drag + 4-note resolve" },
-      { id: 39, name: "Double Ratamacue", category: "drag", sticking: "llR llR L R L", structure: "Double Drag + 4-note resolve" },
-      { id: 40, name: "Triple Ratamacue", category: "drag", sticking: "llR llR llR L R L", structure: "Triple Drag + 4-note resolve" }
+      { id: 31, name: "Drag", category: "drag", sticking: "llR / rrL", structure: "Double grace + Primary", image: "031.png" },
+      { id: 32, name: "Single Drag Tap", category: "drag", sticking: "llR L rrL R", structure: "Drag + Single tap", image: "032.png" },
+      { id: 33, name: "Double Drag Tap", category: "drag", sticking: "llR llR L", structure: "Double Drag + Single tap", image: "033.png" },
+      { id: 34, name: "Lesson 25", category: "drag", sticking: "llR L R", structure: "Drag accent pattern", image: "034.png" },
+      { id: 35, name: "Single Dragadiddle", category: "drag", sticking: "RR L R R LL R L L", structure: "Paradiddle variation", image: "035.png" },
+      { id: 36, name: "Drag Paradiddle #1", category: "drag", sticking: "R llR L R R L rrL R L L", structure: "Drag-accented Paradiddle", image: "036.png" },
+      { id: 37, name: "Drag Paradiddle #2", category: "drag", sticking: "R llR llR L R R L rrL rrL R L L", structure: "Double Drag Paradiddle", image: "037.png" },
+      { id: 38, name: "Single Ratamacue", category: "drag", sticking: "llR L R L", structure: "Drag + 4-note resolve", image: "038.png" },
+      { id: 39, name: "Double Ratamacue", category: "drag", sticking: "llR llR L R L", structure: "Double Drag + 4-note resolve", image: "039.png" },
+      { id: 40, name: "Triple Ratamacue", category: "drag", sticking: "llR llR llR L R L", structure: "Triple Drag + 4-note resolve", image: "040.png" }
     ];
-
-    const emptyStaveSVG = `
-      <svg viewBox="0 0 280 60" xmlns="http://www.w3.org/2000/svg">
-        <line x1="10" y1="10" x2="270" y2="10" stroke="#334155" stroke-width="1"/>
-        <line x1="10" y1="20" x2="270" y2="20" stroke="#334155" stroke-width="1"/>
-        <line x1="10" y1="30" x2="270" y2="30" stroke="#334155" stroke-width="1"/>
-        <line x1="10" y1="40" x2="270" y2="40" stroke="#334155" stroke-width="1"/>
-        <line x1="10" y1="50" x2="270" y2="50" stroke="#334155" stroke-width="1"/>
-
-        <line x1="10" y1="10" x2="10" y2="50" stroke="#1e293b" stroke-width="2"/>
-        <line x1="270" y1="10" x2="270" y2="50" stroke="#1e293b" stroke-width="2"/>
-
-        <rect x="22" y="20" width="3" height="20" fill="#1e293b"/>
-        <rect x="28" y="20" width="3" height="20" fill="#1e293b"/>
-      </svg>
-    `;
 
     let currentCategory = 'all';
 
@@ -410,8 +396,8 @@
           </div>
           <div class="rudiment-title">${item.name}</div>
           
-          <div class="sheet-music">
-            ${emptyStaveSVG}
+          <div class="sheet-music-container">
+            <img src="${item.image}" alt="${item.name} Sheet Music" onerror="this.style.display='none'; this.parentNode.innerText='Image Not Found';">
           </div>
 
           <div class="sticking">${item.sticking}</div>
