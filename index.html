@@ -184,6 +184,7 @@
       position: relative;
       overflow: hidden;
       transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      cursor: pointer;
     }
 
     .card::before {
@@ -304,6 +305,84 @@
     .hidden {
       display: none !important;
     }
+
+    /* モーダル背景 */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(11, 13, 23, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* モーダル本体 */
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      position: relative;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+
+    /* モーダル内の楽譜拡大表示 */
+    .modal-sheet-container {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 1rem;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-sheet-container img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.2rem;
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.8rem;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .modal-close:hover {
+      color: var(--text);
+    }
   </style>
 </head>
 <body>
@@ -328,6 +407,25 @@
   </div>
 
   <div id="gridContainer" class="grid-container"></div>
+
+  <!-- モーダルポップアップ構造 -->
+  <div id="modalOverlay" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal(null, true)">&times;</button>
+      <div class="card-header">
+        <span id="modalNumber" class="rudiment-number"></span>
+        <span id="modalBadge" class="badge"></span>
+      </div>
+      <h2 id="modalTitle" style="font-size: 1.6rem; font-weight: 800;"></h2>
+      
+      <div class="modal-sheet-container">
+        <img id="modalImage" src="" alt="Sheet Music">
+      </div>
+
+      <div id="modalSticking" class="sticking" style="font-size: 1.3rem;"></div>
+      <div id="modalMeta" class="meta" style="font-size: 1rem;"></div>
+    </div>
+  </div>
 
   <script>
     const rudimentsData = [
@@ -398,6 +496,9 @@
         card.setAttribute('data-sticking', item.sticking.toLowerCase());
         card.setAttribute('data-category', item.category);
 
+        // クリック時にモーダルを開くイベントを追加
+        card.onclick = () => openModal(item);
+
         card.innerHTML = `
           <div class="card-header">
             <span class="rudiment-number">No. ${item.id}</span>
@@ -446,6 +547,43 @@
         }
       });
     }
+
+    // --- モーダル制御関数 ---
+    function openModal(item) {
+      document.getElementById('modalNumber').innerText = `No. ${item.id}`;
+      
+      const badge = document.getElementById('modalBadge');
+      badge.innerText = item.category.toUpperCase();
+      badge.className = `badge ${item.category}`;
+
+      document.getElementById('modalTitle').innerText = item.name;
+      
+      const img = document.getElementById('modalImage');
+      img.src = item.image;
+      img.alt = item.name;
+
+      const sticking = document.getElementById('modalSticking');
+      sticking.innerText = item.sticking;
+      sticking.style.color = `var(--${item.category}-color)`;
+
+      document.getElementById('modalMeta').innerText = `Structure: ${item.structure}`;
+
+      document.getElementById('modalOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(event, forceClose = false) {
+      if (forceClose || event.target.id === 'modalOverlay') {
+        document.getElementById('modalOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal(null, true);
+      }
+    });
   </script>
 </body>
 </html>
